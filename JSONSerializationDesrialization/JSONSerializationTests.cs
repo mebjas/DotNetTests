@@ -39,8 +39,8 @@ namespace JSONSerializationDesrialization
     {
         public static string NewtonSoftSerialize(DataModel model)
         {
-            using (var msi = new MemoryStream())
-            using (TextWriter sw = new StreamWriter(msi))
+            StringBuilder sb = new StringBuilder();
+            using (StringWriter sw = new StringWriter(sb))
             using (JsonWriter writer = new JsonTextWriter(sw))
             {
                 var serializer = new JsonSerializer();

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.IO;
 using System.Diagnostics;
 using System.Collections.Generic;
 using System.Linq;
@@ -111,12 +112,27 @@ namespace JSONSerializationDesrialization
 
             Log("NewtonSoftSerialize Streaming", load, count, timeElapsed);
         }
+        
+        private static void JsonSerializationAndPeristanceTest()
+        {
+            DataModel model = DataModelExtension.GenerateDataModel(3000000);
+
+            string blobName = "testblob01";
+            JSONSerializationZipAndBlobTest jszbTest = new JSONSerializationZipAndBlobTest();
+            byte[] data = jszbTest.DataToMemoryStream(model);
+            DataModel model3 = jszbTest.MemoryStreamToData(data);
+
+            string etag = jszbTest.MemoryStreamToBlob(data, blobName);
+            byte[] data2 = jszbTest.BlobToMemoryStream(blobName);
+            DataModel model2 = jszbTest.MemoryStreamToData(data2);
+        }
         #endregion
 
         static void Main(string[] args)
         {
             //NormalSerializationTests();
-            StreamSerializationTests();
+            //StreamSerializationTests();
+            JsonSerializationAndPeristanceTest();
             Console.ReadKey();
         }
     }
